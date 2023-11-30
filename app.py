@@ -35,8 +35,15 @@ def handle_form_submit():
 @app.get('/questions/0')
 def handle_questions():
     """Handles questions from redirect"""
-
-
+    question_0 = survey.questions[0]
+    # replace the h1 with the q0's prompt
+    # pass in question instance
+    # 2 radio buttons -- Jinja for loop,
+        # question_0.choices[0] - first choice
+        # question_0.choices[1] - 2nd choice
+        #["yes", "no"]
+    # 
+    return render_template("question.html", question=question_0)
 
 
 
