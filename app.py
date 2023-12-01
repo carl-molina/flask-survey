@@ -8,7 +8,8 @@ app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 
 debug = DebugToolbarExtension(app)
 
-responses = []
+# responses = []
+# ^moving on to incorporating using a session instead
 
 @app.get('/')
 def get_survey():
@@ -20,6 +21,8 @@ def get_survey():
     # responses.clear()
     # print('This is responses after empty', responses)
     # ^ doesn't work for now
+
+    session["responses"] = []
 
     title = survey.title
     instructions = survey.instructions
@@ -44,7 +47,7 @@ def handle_form_submit():
     """
 
     # clear out responses here
-    responses.clear()
+    session["responses"].clear()
 
     return redirect('/questions/0')
 
@@ -81,7 +84,14 @@ def get_answer(num):
 
     answer = request.form["answer"]
 
+    # responses.append(answer)
+
+    session["responses"].append(answer)
+
+    responses = session["responses"]
     responses.append(answer)
+    session["responses"] = responses
+
     print('This is responses', responses)
 
     num += 1
@@ -110,6 +120,8 @@ def thanks():
     """Redirects user to thank you page after all questions answered"""
 
     prompts = [question.prompt for question in survey.questions]
+
+    responses = session["responses"]
 
     q_a = zip(prompts, responses)
     print('This is q_a', q_a)
