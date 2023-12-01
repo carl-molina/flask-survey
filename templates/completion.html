@@ -4,4 +4,16 @@
 
   <h1>Thanks for completing this survey!</h1>
 
+  <ul>
+    {% for (question, answer) in responses %}
+    <li><span style="font-weight: bold;">{{ question }}</span> {{ answer }}</li>
+
+
+    <!-- Pseudocode for reference: -->
+    <!-- <li>key (question) : value (response to that question)</li> -->
+
+  {% endfor %}
+  </ul>
+
+
 {% endblock %}
