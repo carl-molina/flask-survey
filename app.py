@@ -24,9 +24,15 @@ def get_survey():
     title = survey.title
     instructions = survey.instructions
 
+    # can just pass in survey obj into survery_start
+    # can use survey.title and survey.instructions in survey_start.html
+
     return render_template(
-        "survey_start.html", title=title, instructions=instructions
-        )
+        "survey_start.html",
+        title=title,
+        instructions=instructions
+    )
+    # ^ more professional syntax structure
 
 
 
@@ -46,6 +52,7 @@ def handle_form_submit():
 
 @app.get('/questions/<int:num>')
 def handle_questions(num):
+# GET request should be more get-verb ie get_questions
     """Handles questions from redirect"""
 
     print('This is num', num)
@@ -64,6 +71,7 @@ def handle_questions(num):
 
 @app.post('/answer/<int:num>')
 def get_answer(num):
+# POST request should have a more post-verb ie handle_answer
     """Gets answer from submitted form; appends answer to response list;
     redirects to either the next question or to thank you.
     """
