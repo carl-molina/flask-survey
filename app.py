@@ -8,34 +8,22 @@ app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 
 debug = DebugToolbarExtension(app)
 
-# responses = []
-# ^moving on to incorporating using a session instead
 
 @app.get('/')
 def get_survey():
     """Routes user to survey_start w/ title and instructions variables"""
 
-    # old code for reference:
-    # global responses
-    # pulls in global variable responses
-    # responses.clear()
-    # print('This is responses after empty', responses)
-    # ^ doesn't work for now
 
     session["responses"] = []
 
     title = survey.title
     instructions = survey.instructions
 
-    # can just pass in survey obj into survery_start
-    # can use survey.title and survey.instructions in survey_start.html
-
     return render_template(
         "survey_start.html",
         title=title,
         instructions=instructions
     )
-    # ^ more professional syntax structure
 
 
 
@@ -46,8 +34,8 @@ def handle_form_submit():
     /questions/0
     """
 
-    # clear out responses here
     session["responses"].clear()
+    print('This is session', session["responses"])
 
     return redirect('/questions/0')
 
@@ -55,58 +43,85 @@ def handle_form_submit():
 
 @app.get('/questions/<int:num>')
 def handle_questions(num):
-# GET request should be more get-verb ie get_questions
     """Handles questions from redirect"""
 
     print('This is num', num)
     question = survey.questions[num]
 
-    # Pseudocode for reference:
-    # replace the h1 with the q0's prompt
-    # pass in question instance
-    # 2 radio buttons -- Jinja for loop,
-        # question_0.choices[0] - first choice
-        # question_0.choices[1] - 2nd choice
-        #["yes", "no"]
-    #
-    return render_template("question.html", question=question, num=num)
+    len_of_responses = len(session["responses"])
+    print('This is length of responses', len_of_responses)
+
+    if len_of_responses != num:
+        print('This is num', num)
+        print('This is responses', len_of_responses)
+        print(f"/questions/{len_of_responses}")
+        return redirect(f"/questions/{len_of_responses}")
+        # NEVER FORGET TO RETURN YOUR REDIRECTS!!
+
+    else:
+        return render_template("question.html", question=question, num=num)
+
+    # answer = bool(request.get("answer"))
+
+    # check the session response dictionary object to see if that has that
+    # question
+
+    # number corresponds to the index of that session response list
+    # if there's a value at that index, then we need to redirect them to
+    # a page where there isn't an answer
+
+
+    # TODO:
+    # check len of response list and base the next question on how much len
+    # sessions responses has in order to move to the next valid question
+
+
+
+
+    # if answer:
+    #     redirect(f"/questions/{num+1}")
+    # else:
+    # return render_template("question.html", question=question, num=num)
+
+
+
+    # ^ get answer from page
+
+
+    # if we're at a question that the previous question isn't answered yet,
+    # move back to that question
+
+    # if there isn't a question answered, it'll redirect them to the correct
+    # question to answer
+
+    # if you're at question 2, you get moved to question 3, and if the user
+    # tries to go back to question 2, it says no and moves them back to question
+    # 3.
+
+
+
 
 
 @app.post('/answer/<int:num>')
 def get_answer(num):
-# POST request should have a more post-verb ie handle_answer
     """Gets answer from submitted form; appends answer to response list;
     redirects to either the next question or to thank you.
     """
 
-    # if num == 0:
-    #     responses = []
-
     answer = request.form["answer"]
 
-    # responses.append(answer)
-
-    session["responses"].append(answer)
+    # session["responses"].append(answer)
+    # ^ this is a valid use of append, why NOT do this?
 
     responses = session["responses"]
     responses.append(answer)
     session["responses"] = responses
 
+    print('This is session["responses"]', session["responses"])
+
     print('This is responses', responses)
 
     num += 1
-
-    # Pseudocode for reference:
-    # check if anymore questions, if no more questions, return a redirect to
-    # thank you page
-
-
-    # check if the number is 0, then you want to assign response object
-    # to equal to an empty list. If not 0, just won't reassign
-
-
-    # splicing response list to whatever current question we're on if repeat
-    # of question survey
 
 
     if num < len(survey.questions):
