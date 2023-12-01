@@ -14,6 +14,13 @@ responses = []
 def get_survey():
     """Routes user to survey_start w/ title and instructions variables"""
 
+    # old code for reference:
+    # global responses
+    # pulls in global variable responses
+    # responses.clear()
+    # print('This is responses after empty', responses)
+    # ^ doesn't work for now
+
     title = survey.title
     instructions = survey.instructions
 
@@ -29,6 +36,9 @@ def handle_form_submit():
     Handles form submit from survey_start and redirects user to
     /questions/0
     """
+
+    # clear out responses here
+    responses.clear()
 
     return redirect('/questions/0')
 
@@ -58,6 +68,9 @@ def get_answer(num):
     redirects to either the next question or to thank you.
     """
 
+    # if num == 0:
+    #     responses = []
+
     answer = request.form["answer"]
 
     responses.append(answer)
@@ -69,7 +82,16 @@ def get_answer(num):
     # check if anymore questions, if no more questions, return a redirect to
     # thank you page
 
-    if (num < len(survey.questions)):
+
+    # check if the number is 0, then you want to assign response object
+    # to equal to an empty list. If not 0, just won't reassign
+
+
+    # splicing response list to whatever current question we're on if repeat
+    # of question survey
+
+
+    if num < len(survey.questions):
         return redirect(f"/questions/{num}")
     else:
         return redirect("/thanks")
