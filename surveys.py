@@ -39,7 +39,6 @@ class Survey:
         return f"<{self.__class__.__name__}>"
 
 
-# TODO: only worry about this one!
 satisfaction_survey = Survey(
     "Customer Satisfaction Survey",
     "Please fill out a survey about your experience with us.",
@@ -49,7 +48,6 @@ satisfaction_survey = Survey(
         Question(
             "On average, how much do you spend a month on frisbees?",
             ["Less than $10,000", "$10,000 or more"]),
-            # TODO: ^ Instead of YES/NO, it can be this for choices
         Question("Are you likely to shop here again?"),
     ])
 
